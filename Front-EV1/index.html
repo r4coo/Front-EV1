@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figuritas VAL</title>
+    <link rel="stylesheet" href="valorant-store/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="main-title">FIGURAS VALORANT</h1>
+            <p class="subtitle">SELECCIONA TU AGENTE FAVORITO</p>
+            <!-- Carrito de compras -->
+            <div class="cart-info">
+                <button id="cart-btn" class="cart-btn">
+                    🛒 <span id="cart-count">0</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Pantalla de carga -->
+        <div id="loading" class="loading-screen">
+            <div class="loading-content">
+                <div class="loading-title">CARGANDO AGENTES...</div>
+                <div class="loading-subtitle">Preparando la tienda</div>
+            </div>
+        </div>
+
+        <!-- Hero Carousel -->
+        <section id="hero-section" class="hero-section" style="display: none;">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="agent-info">
+                        <h2 id="hero-name" class="agent-title"></h2>
+                        <p id="hero-description" class="agent-description"></p>
+                        
+                        <div class="abilities-section">
+                            <h3 class="ability-title">HABILIDADES</h3>
+                            <div id="hero-abilities" class="ability-icons"></div>
+                        </div>
+
+                        <div class="purchase-section">
+                            <div class="price-info">
+                                <div class="price">$29.99</div>
+                                <div class="price-label">Figura Premium</div>
+                            </div>
+                            <button id="hero-add-cart" class="add-to-cart-btn">AÑADIR AL CARRITO</button>
+                        </div>
+                    </div>
+
+                    <div class="agent-image">
+                        <img id="hero-image" src="valorant-store/assets/placeholder.svg" alt="">
+                    </div>
+                </div>
+
+                <div class="carousel-controls">
+                    <button id="prev-hero" class="carousel-btn">&lt;</button>
+                    <button id="next-hero" class="carousel-btn">&gt;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rol filtros -->
+        <section id="filters-section" class="filters-section" style="display: none;">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-role="all">TODOS</button>
+                <button class="filter-btn" data-role="Duelist">DUELISTAS</button>
+                <button class="filter-btn" data-role="Controller">CONTROLADORES</button>
+                <button class="filter-btn" data-role="Sentinel">CENTINELAS</button>
+                <button class="filter-btn" data-role="Initiator">INICIADORES</button>
+            </div>
+        </section>
+
+        <!-- Agents Grid -->
+        <section id="agents-section" class="agents-section" style="display: none;">
+            <div id="agents-grid" class="agents-grid"></div>
+        </section>
+
+        <!-- Added cart modal -->
+        <div id="cart-modal" class="cart-modal">
+            <div class="cart-modal-content">
+                <div class="cart-header">
+                    <h2>CARRITO DE COMPRAS</h2>
+                    <button id="close-cart" class="close-btn">✕</button>
+                </div>
+                <div id="cart-items" class="cart-items"></div>
+                <div class="cart-footer">
+                    <div class="cart-total">
+                        <strong>Total: $<span id="cart-total">0.00</span></strong>
+                    </div>
+                    <div class="cart-actions">
+                        <button id="clear-cart" class="clear-cart-btn">VACIAR CARRITO</button>
+                        <button id="checkout" class="checkout-btn">COMPRAR AHORA</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            Datos vía <a href="https://valorant-api.com/" target="_blank">valorant-api.com</a>
+        </footer>
+    </div>
+
+    <script src="valorant-store/js/script.js"></script>
+</body>
+</html>
