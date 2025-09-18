@@ -12,6 +12,13 @@
         <header class="header">
             <h1 class="main-title">FIGURAS VALORANT</h1>
             <p class="subtitle">SELECCIONA TU AGENTE FAVORITO</p>
+                        <!-- Navegación de usuario -->
+            <div class="user-nav">
+                <button id="login-btn" class="nav-btn">INICIAR SESIÓN</button>
+                <button id="register-btn" class="nav-btn">REGISTRARSE</button>
+                <button id="logout-btn" class="nav-btn" style="display: none;">CERRAR SESIÓN</button>
+                <span id="user-welcome" class="user-welcome" style="display: none;"></span>
+            </div>
             <!-- Carrito de compras -->
             <div class="cart-info">
                 <button id="cart-btn" class="cart-btn">
@@ -94,6 +101,62 @@
                         <button id="clear-cart" class="clear-cart-btn">VACIAR CARRITO</button>
                         <button id="checkout" class="checkout-btn">COMPRAR AHORA</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        
+                <!-- Modal de Inicio de Sesión -->
+        <div id="login-modal" class="auth-modal">
+            <div class="auth-modal-content">
+                <div class="auth-header">
+                    <h2>INICIAR SESIÓN</h2>
+                    <button id="close-login" class="close-btn">✕</button>
+                </div>
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">EMAIL:</label>
+                        <input type="email" id="login-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">CONTRASEÑA:</label>
+                        <input type="password" id="login-password" name="password" required>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">INICIAR SESIÓN</button>
+                </form>
+                <div class="auth-switch">
+                    <p>¿No tienes cuenta? <button id="switch-to-register" class="switch-btn">REGISTRARSE</button></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Registro -->
+        <div id="register-modal" class="auth-modal">
+            <div class="auth-modal-content">
+                <div class="auth-header">
+                    <h2>REGISTRARSE</h2>
+                    <button id="close-register" class="close-btn">✕</button>
+                </div>
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="register-name">NOMBRE:</label>
+                        <input type="text" id="register-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">EMAIL:</label>
+                        <input type="email" id="register-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">CONTRASEÑA:</label>
+                        <input type="password" id="register-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">CONFIRMAR CONTRASEÑA:</label>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">REGISTRARSE</button>
+                </form>
+                <div class="auth-switch">
+                    <p>¿Ya tienes cuenta? <button id="switch-to-login" class="switch-btn">INICIAR SESIÓN</button></p>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ let filteredAgents = []
 let currentHeroIndex = 0
 const cart = []
 let selectedRole = "all"
+let currentUser = null
 
 // Elementos DOM
 const loadingScreen = document.getElementById("loading")
@@ -30,8 +31,23 @@ const cartTotal = document.getElementById("cart-total")
 const clearCartBtn = document.getElementById("clear-cart")
 const checkoutBtn = document.getElementById("checkout")
 
+// Elementos de autenticación
+const loginBtn = document.getElementById("login-btn")
+const registerBtn = document.getElementById("register-btn")
+const logoutBtn = document.getElementById("logout-btn")
+const userWelcome = document.getElementById("user-welcome")
+const loginModal = document.getElementById("login-modal")
+const registerModal = document.getElementById("register-modal")
+const closeLoginBtn = document.getElementById("close-login")
+const closeRegisterBtn = document.getElementById("close-register")
+const loginForm = document.getElementById("login-form")
+const registerForm = document.getElementById("register-form")
+const switchToRegisterBtn = document.getElementById("switch-to-register")
+const switchToLoginBtn = document.getElementById("switch-to-login")
+
 // Inicializar la app
 document.addEventListener("DOMContentLoaded", () => {
+  checkAuthStatus()
   fetchAgents()
   setupEventListeners()
 })
@@ -112,6 +128,30 @@ function setupEventListeners() {
   cartModal.addEventListener("click", (e) => {
     if (e.target === cartModal) {
       closeCart()
+    }
+  })
+
+  // Event listeners de autenticación
+  loginBtn.addEventListener("click", openLoginModal)
+  registerBtn.addEventListener("click", openRegisterModal)
+  logoutBtn.addEventListener("click", logout)
+  closeLoginBtn.addEventListener("click", closeLoginModal)
+  closeRegisterBtn.addEventListener("click", closeRegisterModal)
+  switchToRegisterBtn.addEventListener("click", switchToRegister)
+  switchToLoginBtn.addEventListener("click", switchToLogin)
+  loginForm.addEventListener("submit", handleLogin)
+  registerForm.addEventListener("submit", handleRegister)
+
+  // Cerrar modales cuando se hace clic fuera
+  loginModal.addEventListener("click", (e) => {
+    if (e.target === loginModal) {
+      closeLoginModal()
+    }
+  })
+
+  registerModal.addEventListener("click", (e) => {
+    if (e.target === registerModal) {
+      closeRegisterModal()
     }
   })
 }
@@ -364,11 +404,210 @@ function checkout() {
 }
 
 // Mostrar el feedback de que se ha añadido al carrito
-      function showAddedToCartFeedback() {
+function showAddedToCartFeedback() {
   // Feedback simple - podría mejorarse con una notificación de toast
   const originalText = cartBtn.textContent
   cartBtn.style.background = "linear-gradient(45deg, #00ff00, #32cd32)"
   setTimeout(() => {
     cartBtn.style.background = "linear-gradient(45deg, #1e3a8a, #3b82f6)"
   }, 300)
+}
+
+// ==================== FUNCIONES DE AUTENTICACIÓN ====================
+
+// Verificar el estado de autenticación al cargar la página
+function checkAuthStatus() {
+  const user = localStorage.getItem('currentUser')
+  if (user) {
+    currentUser = JSON.parse(user)
+    updateAuthUI()
+  }
+}
+
+// Actualizar la interfaz de usuario según el estado de autenticación
+function updateAuthUI() {
+  if (currentUser) {
+    // Usuario logueado
+    loginBtn.style.display = 'none'
+    registerBtn.style.display = 'none'
+    logoutBtn.style.display = 'inline-block'
+    userWelcome.style.display = 'inline-block'
+    userWelcome.textContent = `¡HOLA, ${currentUser.name.toUpperCase()}!`
+  } else {
+    // Usuario no logueado
+    loginBtn.style.display = 'inline-block'
+    registerBtn.style.display = 'inline-block'
+    logoutBtn.style.display = 'none'
+    userWelcome.style.display = 'none'
+  }
+}
+
+// Abrir modal de login
+function openLoginModal() {
+  loginModal.style.display = 'flex'
+  clearAuthMessages()
+}
+
+// Cerrar modal de login
+function closeLoginModal() {
+  loginModal.style.display = 'none'
+  clearAuthMessages()
+  loginForm.reset()
+}
+
+// Abrir modal de registro
+function openRegisterModal() {
+  registerModal.style.display = 'flex'
+  clearAuthMessages()
+}
+
+// Cerrar modal de registro
+function closeRegisterModal() {
+  registerModal.style.display = 'none'
+  clearAuthMessages()
+  registerForm.reset()
+}
+
+// Cambiar a modal de registro
+function switchToRegister() {
+  closeLoginModal()
+  openRegisterModal()
+}
+
+// Cambiar a modal de login
+function switchToLogin() {
+  closeRegisterModal()
+  openLoginModal()
+}
+
+// Manejar el envío del formulario de login
+function handleLogin(e) {
+  e.preventDefault()
+  
+  const email = document.getElementById('login-email').value
+  const password = document.getElementById('login-password').value
+  
+  // Validar campos
+  if (!email || !password) {
+    showAuthMessage('Por favor, completa todos los campos', 'error', 'login')
+    return
+  }
+  
+  // Obtener usuarios del localStorage
+  const users = JSON.parse(localStorage.getItem('users') || '[]')
+  
+  // Buscar usuario
+  const user = users.find(u => u.email === email && u.password === password)
+  
+  if (user) {
+    // Login exitoso
+    currentUser = user
+    localStorage.setItem('currentUser', JSON.stringify(user))
+    updateAuthUI()
+    closeLoginModal()
+    showAuthMessage('¡Bienvenido de vuelta!', 'success', 'login')
+  } else {
+    showAuthMessage('Email o contraseña incorrectos', 'error', 'login')
+  }
+}
+
+// Manejar el envío del formulario de registro
+function handleRegister(e) {
+  e.preventDefault()
+  
+  const name = document.getElementById('register-name').value
+  const email = document.getElementById('register-email').value
+  const password = document.getElementById('register-password').value
+  const confirmPassword = document.getElementById('register-confirm-password').value
+  
+  // Validar campos
+  if (!name || !email || !password || !confirmPassword) {
+    showAuthMessage('Por favor, completa todos los campos', 'error', 'register')
+    return
+  }
+  
+  // Validar que las contraseñas coincidan
+  if (password !== confirmPassword) {
+    showAuthMessage('Las contraseñas no coinciden', 'error', 'register')
+    return
+  }
+  
+  // Validar longitud de contraseña
+  if (password.length < 6) {
+    showAuthMessage('La contraseña debe tener al menos 6 caracteres', 'error', 'register')
+    return
+  }
+  
+  // Obtener usuarios del localStorage
+  const users = JSON.parse(localStorage.getItem('users') || '[]')
+  
+  // Verificar si el email ya existe
+  if (users.find(u => u.email === email)) {
+    showAuthMessage('Este email ya está registrado', 'error', 'register')
+    return
+  }
+  
+  // Crear nuevo usuario
+  const newUser = {
+    id: Date.now(),
+    name: name,
+    email: email,
+    password: password,
+    createdAt: new Date().toISOString()
+  }
+  
+  // Guardar usuario
+  users.push(newUser)
+  localStorage.setItem('users', JSON.stringify(users))
+  
+  // Loguear automáticamente
+  currentUser = newUser
+  localStorage.setItem('currentUser', JSON.stringify(newUser))
+  updateAuthUI()
+  closeRegisterModal()
+  showAuthMessage('¡Registro exitoso! Bienvenido a la tienda', 'success', 'register')
+}
+
+// Cerrar sesión
+function logout() {
+  currentUser = null
+  localStorage.removeItem('currentUser')
+  updateAuthUI()
+  showAuthMessage('Sesión cerrada correctamente', 'success', 'login')
+}
+
+// Mostrar mensajes de autenticación
+function showAuthMessage(message, type, form) {
+  const modal = form === 'login' ? loginModal : registerModal
+  const formElement = form === 'login' ? loginForm : registerForm
+  
+  // Remover mensajes existentes
+  const existingMessage = modal.querySelector('.auth-message')
+  if (existingMessage) {
+    existingMessage.remove()
+  }
+  
+  // Crear nuevo mensaje
+  const messageDiv = document.createElement('div')
+  messageDiv.className = `auth-message ${type}`
+  messageDiv.textContent = message
+  
+  // Insertar mensaje antes del formulario
+  formElement.parentNode.insertBefore(messageDiv, formElement)
+  
+  // Auto-remover mensaje después de 5 segundos
+  setTimeout(() => {
+    if (messageDiv.parentNode) {
+      messageDiv.remove()
+    }
+  }, 5000)
+}
+
+// Limpiar mensajes de autenticación
+function clearAuthMessages() {
+  const loginMessage = loginModal.querySelector('.auth-message')
+  const registerMessage = registerModal.querySelector('.auth-message')
+  
+  if (loginMessage) loginMessage.remove()
+  if (registerMessage) registerMessage.remove()
 }
