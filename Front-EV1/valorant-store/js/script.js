@@ -30,6 +30,24 @@ const cartTotal = document.getElementById("cart-total")
 const clearCartBtn = document.getElementById("clear-cart")
 const checkoutBtn = document.getElementById("checkout")
 
+// Elementos del modal de personaje
+const characterModal = document.getElementById("character-modal")
+const closeCharacterBtn = document.getElementById("close-character")
+const characterModalName = document.getElementById("character-modal-name")
+const characterModalImage = document.getElementById("character-modal-image")
+const characterModalRole = document.getElementById("character-modal-role")
+const characterModalBio = document.getElementById("character-modal-bio")
+const characterAbilitiesList = document.getElementById("character-abilities-list")
+const characterAddToCartBtn = document.getElementById("character-add-to-cart")
+
+// Elementos de especificaciones de figura
+const figureHeight = document.getElementById("figure-height")
+const figureWeight = document.getElementById("figure-weight")
+const figureMaterial = document.getElementById("figure-material")
+const figureJoints = document.getElementById("figure-joints")
+const figureAccessories = document.getElementById("figure-accessories")
+const figureAge = document.getElementById("figure-age")
+
 // Inicializar la app
 document.addEventListener("DOMContentLoaded", () => {
   fetchAgents()
@@ -112,6 +130,17 @@ function setupEventListeners() {
   cartModal.addEventListener("click", (e) => {
     if (e.target === cartModal) {
       closeCart()
+    }
+  })
+
+    // Event listeners del modal de personaje
+  closeCharacterBtn.addEventListener("click", closeCharacterModal)
+  characterAddToCartBtn.addEventListener("click", addCharacterToCart)
+  
+  // Cerrar modal de personaje cuando se hace clic fuera
+  characterModal.addEventListener("click", (e) => {
+    if (e.target === characterModal) {
+      closeCharacterModal()
     }
   })
 }
@@ -220,6 +249,7 @@ function renderAgents() {
   filteredAgents.forEach((agent) => {
     const agentCard = document.createElement("div")
     agentCard.className = "agent-card"
+    agentCard.style.cursor = "pointer"
 
     agentCard.innerHTML = `
             <div class="agent-image-container">
@@ -234,9 +264,14 @@ function renderAgents() {
                         <div class="card-price-label">Figura Premium</div>
                     </div>
                 </div>
-                <button class="card-add-btn" onclick="addToCart('${agent.uuid}')">AÑADIR AL CARRITO</button>
+                <button class="card-add-btn" onclick="event.stopPropagation(); addToCart('${agent.uuid}')">AÑADIR AL CARRITO</button>
             </div>
         `
+
+    // Agregar evento de clic para mostrar información del personaje
+    agentCard.addEventListener("click", () => {
+      showCharacterModal(agent)
+    })
 
     agentsGrid.appendChild(agentCard)
   })
@@ -371,4 +406,222 @@ function checkout() {
   setTimeout(() => {
     cartBtn.style.background = "linear-gradient(45deg, #1e3a8a, #3b82f6)"
   }, 300)
+}
+// ==================== FUNCIONES DEL MODAL DE PERSONAJE ====================
+
+// Mostrar modal con información del personaje
+function showCharacterModal(agent) {
+  // Actualizar información básica
+  characterModalName.textContent = agent.displayName.toUpperCase()
+  characterModalImage.src = agent.fullPortrait || "/placeholder.svg"
+  characterModalImage.alt = agent.displayName
+  characterModalRole.textContent = agent.role?.displayName.toUpperCase() || "AGENTE"
+  characterModalBio.textContent = agent.description || "Información no disponible"
+
+  // Actualizar especificaciones de figura
+  updateFigureSpecs(agent)
+
+  // Renderizar habilidades
+  renderCharacterAbilities(agent.abilities || [])
+
+  // Configurar botón de añadir al carrito
+  characterAddToCartBtn.onclick = () => {
+    addToCart(agent.uuid)
+    closeCharacterModal()
+  }
+
+  // Mostrar modal
+  characterModal.style.display = "flex"
+}
+
+// Renderizar las habilidades del personaje
+function renderCharacterAbilities(abilities) {
+  characterAbilitiesList.innerHTML = ""
+
+  if (!abilities || abilities.length === 0) {
+    characterAbilitiesList.innerHTML = '<p style="color: #ffffff; font-size: 0.5rem;">No hay información de habilidades disponible</p>'
+    return
+  }
+
+  abilities.forEach((ability) => {
+    const abilityItem = document.createElement("div")
+    abilityItem.className = "ability-item"
+
+    abilityItem.innerHTML = `
+      <div class="ability-icon">
+        <img src="${ability.displayIcon || "/placeholder.svg"}" alt="${ability.displayName}">
+      </div>
+      <div class="ability-info">
+        <div class="ability-name">${ability.displayName.toUpperCase()}</div>
+        <div class="ability-description">${ability.description || "Descripción no disponible"}</div>
+      </div>
+    `
+
+    characterAbilitiesList.appendChild(abilityItem)
+  })
+}
+
+// Cerrar modal de personaje
+function closeCharacterModal() {
+  characterModal.style.display = "none"
+}
+
+// Actualizar especificaciones de figura basadas en el personaje
+function updateFigureSpecs(agent) {
+  // Generar especificaciones únicas basadas en el personaje
+  const specs = generateFigureSpecs(agent)
+  
+  figureHeight.textContent = specs.height
+  figureWeight.textContent = specs.weight
+  figureMaterial.textContent = specs.material
+  figureJoints.textContent = specs.joints
+  figureAccessories.textContent = specs.accessories
+  figureAge.textContent = specs.age
+}
+
+// Generar especificaciones únicas para cada personaje
+function generateFigureSpecs(agent) {
+  const role = agent.role?.displayName || "Agent"
+  const name = agent.displayName.toLowerCase()
+  
+  // Especificaciones base que varían según el rol y personaje
+  const baseSpecs = {
+    height: "25 cm",
+    weight: "450 g",
+    material: "PVC Premium",
+    joints: "15 puntos",
+    accessories: "Base + Armas",
+    age: "14+ años"
+  }
+  
+  // Variaciones según el rol
+  switch (role) {
+    case "Duelist":
+      baseSpecs.height = "26 cm"
+      baseSpecs.weight = "480 g"
+      baseSpecs.joints = "18 puntos"
+      baseSpecs.accessories = "Base + Armas + Efectos"
+      break
+    case "Controller":
+      baseSpecs.height = "24 cm"
+      baseSpecs.weight = "420 g"
+      baseSpecs.joints = "16 puntos"
+      baseSpecs.accessories = "Base + Dispositivos"
+      break
+    case "Sentinel":
+      baseSpecs.height = "25 cm"
+      baseSpecs.weight = "460 g"
+      baseSpecs.joints = "17 puntos"
+      baseSpecs.accessories = "Base + Equipos Defensivos"
+      break
+    case "Initiator":
+      baseSpecs.height = "25 cm"
+      baseSpecs.weight = "440 g"
+      baseSpecs.joints = "16 puntos"
+      baseSpecs.accessories = "Base + Herramientas de Reconocimiento"
+      break
+  }
+  
+  // Variaciones específicas por personaje
+  if (name.includes("jett")) {
+    baseSpecs.height = "24 cm"
+    baseSpecs.weight = "420 g"
+    baseSpecs.accessories = "Base + Cuchillos + Efectos de Viento"
+  } else if (name.includes("sage")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "450 g"
+    baseSpecs.accessories = "Base + Orbe de Curación + Efectos de Hielo"
+  } else if (name.includes("phoenix")) {
+    baseSpecs.height = "26 cm"
+    baseSpecs.weight = "480 g"
+    baseSpecs.accessories = "Base + Bola de Fuego + Efectos de Llamas"
+  } else if (name.includes("sova")) {
+    baseSpecs.height = "26 cm"
+    baseSpecs.weight = "470 g"
+    baseSpecs.accessories = "Base + Arco + Flechas + Dron"
+  } else if (name.includes("viper")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "460 g"
+    baseSpecs.accessories = "Base + Dispositivos de Gas + Efectos Tóxicos"
+  } else if (name.includes("cypher")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "450 g"
+    baseSpecs.accessories = "Base + Cámaras + Cables + Efectos de Vigilancia"
+  } else if (name.includes("reyna")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "460 g"
+    baseSpecs.accessories = "Base + Orbe de Vida + Efectos de Almas"
+  } else if (name.includes("killjoy")) {
+    baseSpecs.height = "24 cm"
+    baseSpecs.weight = "430 g"
+    baseSpecs.accessories = "Base + Turret + Alarmbot + Nanoswarm"
+  } else if (name.includes("breach")) {
+    baseSpecs.height = "27 cm"
+    baseSpecs.weight = "500 g"
+    baseSpecs.accessories = "Base + Dispositivos Sísmicos + Efectos de Terremoto"
+  } else if (name.includes("omen")) {
+    baseSpecs.height = "26 cm"
+    baseSpecs.weight = "480 g"
+    baseSpecs.accessories = "Base + Orbes de Sombra + Efectos de Teletransporte"
+  } else if (name.includes("raze")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "470 g"
+    baseSpecs.accessories = "Base + Granadas + Bot + Efectos Explosivos"
+  } else if (name.includes("skye")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "450 g"
+    baseSpecs.accessories = "Base + Animales Espirituales + Efectos de Naturaleza"
+  } else if (name.includes("yoru")) {
+    baseSpecs.height = "26 cm"
+    baseSpecs.weight = "480 g"
+    baseSpecs.accessories = "Base + Máscara + Efectos Dimensionales"
+  } else if (name.includes("astra")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "460 g"
+    baseSpecs.accessories = "Base + Estrellas + Efectos Cósmicos"
+  } else if (name.includes("kay/o")) {
+    baseSpecs.height = "26 cm"
+    baseSpecs.weight = "490 g"
+    baseSpecs.accessories = "Base + Cuchillo + Efectos de Supresión"
+  } else if (name.includes("chamber")) {
+    baseSpecs.height = "26 cm"
+    baseSpecs.weight = "480 g"
+    baseSpecs.accessories = "Base + Armas Personalizadas + Efectos de Elegancia"
+  } else if (name.includes("neon")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "450 g"
+    baseSpecs.accessories = "Base + Efectos Eléctricos + Carril de Velocidad"
+  } else if (name.includes("fade")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "460 g"
+    baseSpecs.accessories = "Base + Pesadillas + Efectos de Terror"
+  } else if (name.includes("harbor")) {
+    baseSpecs.height = "26 cm"
+    baseSpecs.weight = "480 g"
+    baseSpecs.accessories = "Base + Escudo de Agua + Efectos Acuáticos"
+  } else if (name.includes("gekko")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "450 g"
+    baseSpecs.accessories = "Base + Criaturas + Efectos Biológicos"
+  } else if (name.includes("deadlock")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "460 g"
+    baseSpecs.accessories = "Base + Nanofilamentos + Efectos de Contención"
+  } else if (name.includes("iso")) {
+    baseSpecs.height = "26 cm"
+    baseSpecs.weight = "480 g"
+    baseSpecs.accessories = "Base + Efectos Dimensionales + Escudo de Energía"
+  } else if (name.includes("clove")) {
+    baseSpecs.height = "25 cm"
+    baseSpecs.weight = "450 g"
+    baseSpecs.accessories = "Base + Efectos de Humo + Regeneración"
+  }
+  
+  return baseSpecs
+}
+
+// Añadir personaje al carrito desde el modal
+function addCharacterToCart() {
+  // Esta función se configura dinámicamente en showCharacterModal
+  // para usar el agente correcto
 }

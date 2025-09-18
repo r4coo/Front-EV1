@@ -98,6 +98,127 @@
             </div>
         </div>
 
+                <!-- Modal de Inicio de Sesión -->
+        <div id="login-modal" class="auth-modal">
+            <div class="auth-modal-content">
+                <div class="auth-header">
+                    <h2>INICIAR SESIÓN</h2>
+                    <button id="close-login" class="close-btn">✕</button>
+                </div>
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">EMAIL:</label>
+                        <input type="email" id="login-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">CONTRASEÑA:</label>
+                        <input type="password" id="login-password" name="password" required>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">INICIAR SESIÓN</button>
+                </form>
+                <div class="auth-switch">
+                    <p>¿No tienes cuenta? <button id="switch-to-register" class="switch-btn">REGISTRARSE</button></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Registro -->
+        <div id="register-modal" class="auth-modal">
+            <div class="auth-modal-content">
+                <div class="auth-header">
+                    <h2>REGISTRARSE</h2>
+                    <button id="close-register" class="close-btn">✕</button>
+                </div>
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="register-name">NOMBRE:</label>
+                        <input type="text" id="register-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">EMAIL:</label>
+                        <input type="email" id="register-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">CONTRASEÑA:</label>
+                        <input type="password" id="register-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">CONFIRMAR CONTRASEÑA:</label>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">REGISTRARSE</button>
+                </form>
+                <div class="auth-switch">
+                    <p>¿Ya tienes cuenta? <button id="switch-to-login" class="switch-btn">INICIAR SESIÓN</button></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Información del Personaje -->
+        <div id="character-modal" class="character-modal">
+            <div class="character-modal-content">
+                <div class="character-header">
+                    <h2 id="character-modal-name">NOMBRE DEL AGENTE</h2>
+                    <button id="close-character" class="close-btn">✕</button>
+                </div>
+                
+                <div class="character-body">
+                    <div class="character-image-section">
+                        <img id="character-modal-image" src="" alt="" class="character-modal-img">
+                        <div class="character-role-badge" id="character-modal-role">ROL</div>
+                    </div>
+                    
+                    <div class="character-info-section">
+                        <div class="character-bio">
+                            <h3>BIOGRAFÍA</h3>
+                            <p id="character-modal-bio">Descripción del agente...</p>
+                        </div>
+                        
+                        <div class="figure-specs">
+                            <h3>ESPECIFICACIONES DE LA FIGURA</h3>
+                            <div class="specs-grid">
+                                <div class="spec-item">
+                                    <span class="spec-label">ALTURA:</span>
+                                    <span class="spec-value" id="figure-height">25 cm</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">PESO:</span>
+                                    <span class="spec-value" id="figure-weight">450 g</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">MATERIAL:</span>
+                                    <span class="spec-value" id="figure-material">PVC Premium</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">ARTICULACIONES:</span>
+                                    <span class="spec-value" id="figure-joints">15 puntos</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">ACCESORIOS:</span>
+                                    <span class="spec-value" id="figure-accessories">Base + Armas</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">EDAD RECOMENDADA:</span>
+                                    <span class="spec-value" id="figure-age">14+ años</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="character-abilities">
+                            <h3>HABILIDADES</h3>
+                            <div id="character-abilities-list" class="abilities-list">
+                                <!-- Las habilidades se cargarán dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="character-footer">
+                    <button id="character-add-to-cart" class="character-add-btn">AÑADIR AL CARRITO - $29.99</button>
+                </div>
+            </div>
+        </div>
+
         <footer class="footer">
             Datos vía <a href="https://valorant-api.com/" target="_blank">valorant-api.com</a>
         </footer>
