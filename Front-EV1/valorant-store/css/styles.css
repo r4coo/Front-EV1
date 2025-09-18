@@ -45,7 +45,8 @@ body {
 .cart-info {
   position: absolute;
   top: 0;
-  right: 0;
+  right: -20px;
+  z-index: 10;
 }
 
 .cart-btn {
@@ -65,6 +66,50 @@ body {
   background: linear-gradient(45deg, #3b82f6, #60a5fa);
   box-shadow: 0 0 20px rgba(135, 206, 235, 0.8);
   transform: translateY(-2px);
+}
+
+/* Botones de autenticación */
+.auth-buttons {
+  position: absolute;
+  top: 0;
+  left: -100px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.auth-btn {
+  background: rgba(30, 58, 138, 0.3);
+  border: 2px solid #87ceeb;
+  color: #87ceeb !important;
+  padding: 8px 15px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.6rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
+}
+
+.auth-btn:hover {
+  background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+  box-shadow: 0 0 15px rgba(135, 206, 235, 0.6);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.login-btn:hover {
+  background: linear-gradient(45deg, #00ff00, #32cd32);
+  border-color: #00ff00;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+  color: #000000 !important;
+}
+
+.register-btn:hover {
+  background: linear-gradient(45deg, #ff6b35, #ff8c42);
+  border-color: #ff6b35;
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+  color: #ffffff !important;
 }
 
 @keyframes glow {
@@ -583,6 +628,142 @@ body {
   opacity: 0.7;
 }
 
+/* Modales de autenticación */
+.auth-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-modal-content {
+  background: linear-gradient(135deg, #0f1419 0%, #1e3a8a 50%);
+  border: 2px solid #87ceeb;
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 30px rgba(135, 206, 235, 0.5);
+  animation: authModalSlideIn 0.3s ease-out;
+}
+
+@keyframes authModalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.auth-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #87ceeb;
+  padding-bottom: 15px;
+}
+
+.auth-header h2 {
+  color: #87ceeb !important;
+  font-size: 1rem;
+  text-shadow: 0 0 10px #87ceeb;
+  margin: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  color: #87ceeb !important;
+  font-size: 0.6rem;
+  text-shadow: 0 0 5px #87ceeb;
+}
+
+.form-group input {
+  background: rgba(15, 20, 25, 0.8);
+  border: 2px solid #87ceeb;
+  color: #ffffff !important;
+  padding: 10px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.5rem;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.auth-submit-btn {
+  background: linear-gradient(45deg, #00ff00, #32cd32);
+  border: 2px solid #00ff00;
+  color: #000000 !important;
+  padding: 12px 20px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.6rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+  margin-top: 10px;
+}
+
+.auth-submit-btn:hover {
+  background: linear-gradient(45deg, #32cd32, #7fff00);
+  box-shadow: 0 0 25px rgba(0, 255, 0, 0.8);
+  transform: translateY(-2px);
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #87ceeb;
+}
+
+.auth-switch p {
+  color: #ffffff !important;
+  font-size: 0.5rem;
+  margin: 0;
+}
+
+.switch-btn {
+  background: none;
+  border: none;
+  color: #87ceeb !important;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.5rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.3s ease;
+}
+
+.switch-btn:hover {
+  color: #00ff00 !important;
+  text-shadow: 0 0 5px #00ff00;
+}
+
 /* Character Modal */
 .character-modal {
   display: none;
@@ -870,6 +1051,13 @@ body {
   .cart-info {
     position: static;
     margin-top: 20px;
+  }
+
+  .auth-buttons {
+    position: static;
+    margin-top: 20px;
+    margin-left: 0;
+    justify-content: center;
   }
 
   .cart-actions {

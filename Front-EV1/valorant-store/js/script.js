@@ -30,6 +30,18 @@ const cartTotal = document.getElementById("cart-total")
 const clearCartBtn = document.getElementById("clear-cart")
 const checkoutBtn = document.getElementById("checkout")
 
+// Elementos de autenticación
+const loginBtn = document.getElementById("login-btn")
+const registerBtn = document.getElementById("register-btn")
+const loginModal = document.getElementById("login-modal")
+const registerModal = document.getElementById("register-modal")
+const closeLoginBtn = document.getElementById("close-login")
+const closeRegisterBtn = document.getElementById("close-register")
+const switchToRegisterBtn = document.getElementById("switch-to-register")
+const switchToLoginBtn = document.getElementById("switch-to-login")
+const loginForm = document.getElementById("login-form")
+const registerForm = document.getElementById("register-form")
+
 // Elementos del modal de personaje
 const characterModal = document.getElementById("character-modal")
 const closeCharacterBtn = document.getElementById("close-character")
@@ -141,6 +153,29 @@ function setupEventListeners() {
   characterModal.addEventListener("click", (e) => {
     if (e.target === characterModal) {
       closeCharacterModal()
+    }
+  })
+
+  // Event listeners de autenticación
+  loginBtn.addEventListener("click", openLoginModal)
+  registerBtn.addEventListener("click", openRegisterModal)
+  closeLoginBtn.addEventListener("click", closeLoginModal)
+  closeRegisterBtn.addEventListener("click", closeRegisterModal)
+  switchToRegisterBtn.addEventListener("click", switchToRegister)
+  switchToLoginBtn.addEventListener("click", switchToLogin)
+  loginForm.addEventListener("submit", handleLogin)
+  registerForm.addEventListener("submit", handleRegister)
+
+  // Cerrar modales cuando se hace clic fuera
+  loginModal.addEventListener("click", (e) => {
+    if (e.target === loginModal) {
+      closeLoginModal()
+    }
+  })
+
+  registerModal.addEventListener("click", (e) => {
+    if (e.target === registerModal) {
+      closeRegisterModal()
     }
   })
 }
@@ -624,4 +659,118 @@ function generateFigureSpecs(agent) {
 function addCharacterToCart() {
   // Esta función se configura dinámicamente en showCharacterModal
   // para usar el agente correcto
+}
+
+// ==================== FUNCIONES DE AUTENTICACIÓN ====================
+
+// Abrir modal de login
+function openLoginModal() {
+  loginModal.style.display = "flex"
+}
+
+// Cerrar modal de login
+function closeLoginModal() {
+  loginModal.style.display = "none"
+  loginForm.reset()
+}
+
+// Abrir modal de registro
+function openRegisterModal() {
+  registerModal.style.display = "flex"
+}
+
+// Cerrar modal de registro
+function closeRegisterModal() {
+  registerModal.style.display = "none"
+  registerForm.reset()
+}
+
+// Cambiar a modal de registro
+function switchToRegister() {
+  closeLoginModal()
+  openRegisterModal()
+}
+
+// Cambiar a modal de login
+function switchToLogin() {
+  closeRegisterModal()
+  openLoginModal()
+}
+
+// Manejar envío del formulario de login
+function handleLogin(e) {
+  e.preventDefault()
+  
+  const email = document.getElementById("login-email").value
+  const password = document.getElementById("login-password").value
+  
+  // Validación básica
+  if (!email || !password) {
+    alert("Por favor, completa todos los campos")
+    return
+  }
+  
+  // Simular login (en una aplicación real, esto sería una llamada a la API)
+  console.log("Login attempt:", { email, password })
+  
+  // Mostrar mensaje de éxito
+  alert("¡Inicio de sesión exitoso! (Demo)")
+  closeLoginModal()
+  
+  // Cambiar el estado de los botones (opcional)
+  updateAuthButtons(true)
+}
+
+// Manejar envío del formulario de registro
+function handleRegister(e) {
+  e.preventDefault()
+  
+  const name = document.getElementById("register-name").value
+  const email = document.getElementById("register-email").value
+  const password = document.getElementById("register-password").value
+  const confirmPassword = document.getElementById("register-confirm-password").value
+  
+  // Validación básica
+  if (!name || !email || !password || !confirmPassword) {
+    alert("Por favor, completa todos los campos")
+    return
+  }
+  
+  if (password !== confirmPassword) {
+    alert("Las contraseñas no coinciden")
+    return
+  }
+  
+  if (password.length < 6) {
+    alert("La contraseña debe tener al menos 6 caracteres")
+    return
+  }
+  
+  // Simular registro (en una aplicación real, esto sería una llamada a la API)
+  console.log("Register attempt:", { name, email, password })
+  
+  // Mostrar mensaje de éxito
+  alert("¡Registro exitoso! Bienvenido a Figuras Valorant (Demo)")
+  closeRegisterModal()
+  
+  // Cambiar el estado de los botones (opcional)
+  updateAuthButtons(true)
+}
+
+// Actualizar el estado de los botones de autenticación
+function updateAuthButtons(isLoggedIn) {
+  if (isLoggedIn) {
+    loginBtn.textContent = "MI PERFIL"
+    registerBtn.textContent = "CERRAR SESIÓN"
+    loginBtn.onclick = () => alert("Perfil de usuario (Demo)")
+    registerBtn.onclick = () => {
+      updateAuthButtons(false)
+      alert("Sesión cerrada")
+    }
+  } else {
+    loginBtn.textContent = "INICIAR SESIÓN"
+    registerBtn.textContent = "REGISTRAR"
+    loginBtn.onclick = openLoginModal
+    registerBtn.onclick = openRegisterModal
+  }
 }
